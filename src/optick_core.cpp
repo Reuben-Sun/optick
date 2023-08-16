@@ -889,7 +889,7 @@ void Core::DumpEvents(EventStorage& entry, const EventTime& timeSlice, ScopeData
 		const EventData* rootEvent = nullptr;
 		const int64 batchLimitMs = 3;
 
-		entry.eventBuffer.ForEach([&](const EventData& data)
+		entry.eventBuffer.ForEach2([&](const EventData& data)
 		{
 			if (data.finish >= data.start && data.start >= timeSlice.start && timeSlice.finish >= data.finish)
 			{

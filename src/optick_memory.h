@@ -200,7 +200,7 @@ namespace Optick
 		}
 	};
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	template<class T, uint32 SIZE = 16>
+	template<class T, uint32 SIZE = 128>
 	class MemoryPool
 	{
 		typedef MemoryChunk<T, SIZE> Chunk;
@@ -211,7 +211,7 @@ namespace Optick
 		OPTICK_INLINE void AddChunk()
 		{
 			index = 0;
-			if (!chunk || !chunk->next)
+			/*if (!chunk || !chunk->next)
 			{
 				Chunk* newChunk = Memory::New<Chunk>();
 				if (chunk)
@@ -228,6 +228,10 @@ namespace Optick
 			else
 			{
 				chunk = chunk->next;
+			}*/
+			if (!chunk)
+			{
+				root = chunk = Memory::New<Chunk>();
 			}
 		}
 	public:
@@ -414,6 +418,24 @@ namespace Optick
 			if (chunk)
 				for (uint32 i = 0; i < index; ++i)
 					func(chunk->data[i]);
+		}
+
+		template<class Func>
+		void ForEach2(Func func)
+		{
+			if (chunk) 
+			{
+				for (uint32_t i = index; i < SIZE; ++i)
+				{
+					func(chunk->data[i]);
+				}
+				for (uint32 i = 0; i < index; ++i)
+				{
+					func(chunk->data[i]);
+				}
+					
+			}
+				
 		}
 
 		template<class Func>
